@@ -7,13 +7,15 @@ import signal
 import time
 import random
 
+
 # Defining signal interrupt handler
 def signal_term_handler(signal, frame):
-	print ("Someone is trying to kill me")
-	print ('Cleaning up the GPIOs')
+	print("Someone is trying to kill me")
+	print('Cleaning up the GPIOs')
 	GPIO.cleanup()
 	sys.exit()
- 
+
+
 signal.signal(signal.SIGTERM, signal_term_handler)
 signal.signal(signal.SIGINT, signal_term_handler)
 
@@ -29,13 +31,13 @@ logical_map = [i for i in range(9)]
 # Setup the board
 GPIO.setmode(GPIO.BOARD)
 for i in range(1,9):
-  GPIO.setup(pin_map[i], GPIO.OUT)
-time.sleep(2.0);
+	GPIO.setup(pin_map[i], GPIO.OUT)
+time.sleep(2.0)
 
 while True :
 	for i in range (1,6):
 		GPIO.output(pin_map[logical_map[i]],1)
-		if (i==1):
+		if(i==1):
 			GPIO.output (pin_map[logical_map[5]],0)
 		else:
 			GPIO.output (pin_map[logical_map[i-1]],0)
