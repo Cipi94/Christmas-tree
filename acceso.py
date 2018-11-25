@@ -35,7 +35,7 @@ time.sleep(2.0);
 while True:
 	for i in range (1,7):
 		GPIO.output(pin_map[logical_map[i]],1)
-	time.sleep(30)
+	time.sleep(60)
 	for j in range (5):
 		for i in range (1,6):
 			GPIO.output(pin_map[logical_map[i]],1)

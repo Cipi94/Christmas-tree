@@ -7,7 +7,25 @@ import RPi.GPIO as GPIO, time
 import sys
 import time
 import pygame
-import random
+import signal
+import subprocess
+import os.path
+
+# Defining signal interrupt handler
+def signal_term_handler(signal, frame):
+	print ("Someone is trying to kill me")
+	print ('Cleaning up the GPIOs')
+	GPIO.cleanup()
+	sys.exit()
+ 
+signal.signal(signal.SIGTERM, signal_term_handler)
+signal.signal(signal.SIGINT, signal_term_handler)
+
+#Check is exists Acceso.py is running
+if os.path.isfile("./acceso.pid"):
+	subprocess.check_output("kill `cat acceso.pid`", shell=True)
+	subprocess.check_output("rm acceso.pid", shell=True)
+
 
 pin_map = [0,11,12,13,15,16,18,22,7]
 
@@ -82,3 +100,8 @@ while True :
 
 print ('Cleaning up the GPIOs')
 GPIO.cleanup()
+'''while True:
+	choice = raw_input('Do you want to light up the tree? y/n\n> ')
+	if choice == 'y':
+		print ('Starting Acceso.py')
+		subprocess.check_output("bash acceso.sh", shell=True)'''
