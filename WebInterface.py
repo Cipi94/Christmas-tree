@@ -1,14 +1,18 @@
 import time
 
-from flask import Flask
+from flask import Flask, redirect
 from aaa import Prova
 import threading
+from controller import Controller
+from vixenexport import VixenExport
 
 app = Flask(__name__)
 
-stri = 's'
-x = Prova('music')
-t1 = threading.Thread(target=x.start_music)
+# stri = 's'
+# x = Prova('music')
+# t2 = threading.Thread(target=x.start_music)
+#
+# t1 = None
 
 
 @app.route('/')
@@ -24,12 +28,11 @@ def test(username):
 @app.route('/aaa')
 def aaa():
     global x
-    global t1
-    if t1.isAlive():
-        print(t1.isAlive())
+    if t2.isAlive():
+        print(t2.isAlive())
         return '<h1>music has already started</h1><br><a href="/bbb">stop</a>'
     else:
-        thread_init()
+        thread_init(None)
         t1.start()
         return '<h1>starting music</h1><br><a href="/bbb">stop</a>'
 
@@ -54,10 +57,31 @@ def m_stop():
 #     return 'moo'
 
 
-def thread_init():
+@app.route('/start_music/<music>')
+def start_music(music=None):
+    # if music is not None:
+    #     if t1 is None or t1.isAlive():
+    #         return
+    #     thread_init(music)
+    #
+    #     return redirect("/")
+    #
+    # return "Error"
+    try:
+        controller.play(music, True)
+    except ValueError:
+        return "music already playing or thread error"
+    return redirect("/")
+
+
+def thread_init(music):
     global t1
     t1 = threading.Thread(target=x.start_music)
+    global vixenThread
+    vixenThread = threading.Thread(target=VixenExport, args=music)
 
+
+controller = Controller()
 
 if __name__ == '__main__':
     app.run(debug=True)

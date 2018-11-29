@@ -12,62 +12,67 @@ import csv
 import signal
 
 
-# Defining signal interrupt handler
-def signal_term_handler(signal, frame):
-    print("Someone is trying to kill me")
-    print('Cleaning up the GPIOs')
-    GPIO.cleanup()
-    sys.exit()
+class VixenExport:
 
+    def __init__(self, song):
+        self.song = song
 
-signal.signal(signal.SIGTERM, signal_term_handler)
-signal.signal(signal.SIGINT, signal_term_handler)
+    # Defining signal interrupt handler
+    def signal_term_handler(signal, frame):
+        print("Someone is trying to kill me")
+        print('Cleaning up the GPIOs')
+        GPIO.cleanup()
+        sys.exit()
 
-pin_map = [0, 11, 12, 13, 15, 16, 18, 22, 7]
+    signal.signal(signal.SIGTERM, signal_term_handler)
+    signal.signal(signal.SIGINT, signal_term_handler)
 
-GPIO.setmode(GPIO.BOARD)
-for i in range(1, 9):
-    GPIO.setup(pin_map[i], GPIO.OUT)
-time.sleep(2.0);
+    def begin(self):
+        pin_map = [0, 11, 12, 13, 15, 16, 18, 22, 7]
 
-GPIO.output(7, True)
+        GPIO.setmode(GPIO.BOARD)
+        for i in range(1, 9):
+            GPIO.setup(pin_map[i], GPIO.OUT)
+        time.sleep(2.0)
 
-logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        GPIO.output(7, True)
 
-# Open the input sequnce file and read/parse it
-with open(sys.argv[1], 'r') as f:
-    seq_data = f.readlines()
-    for i in range(len(seq_data)):
-        seq_data[i] = seq_data[i].rstrip()
+        logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-start_time = int(round(time.time() * 1000))
-step = 0
-# Load and play the music
-pygame.mixer.pre_init(44100, -16, 2, 1024)
-pygame.mixer.init()
-pygame.mixer.music.load(sys.argv[2])
-pygame.mixer.music.play()
+        # Open the input sequence file and read/parse it
+        with open(sys.argv[1], 'r') as f:
+            seq_data = f.readlines()
+            for i in range(len(seq_data)):
+                seq_data[i] = seq_data[i].rstrip()
 
-while True:
-    next_step = seq_data[step].split(",")
-    cur_time = int(round(time.time() * 1000)) - start_time
+        start_time = int(round(time.time() * 1000))
+        step = 0
+        # Load and play the music
+        pygame.mixer.pre_init(44100, -16, 2, 1024)
+        pygame.mixer.init()
+        pygame.mixer.music.load(sys.argv[2])
+        pygame.mixer.music.play()
 
-    # time to run the command
-    if int(next_step[0]) <= cur_time:
+        while True:
+            next_step = seq_data[step].split(",")
+            cur_time = int(round(time.time() * 1000)) - start_time
 
-        print(next_step);
-        for light in range(1, 7):
-            if next_step[light] == "255":
-                GPIO.output(pin_map[logical_map[light]], True)
-            else:
-                GPIO.output(pin_map[logical_map[light]], False)
+            # time to run the command
+            if int(next_step[0]) <= cur_time:
 
-        # if the END command
-        if next_step[1].rstrip() == "END":
-            for i in range(1, 9):
-                GPIO.output(pin_map[logical_map[i]], False)
-            break
-        step += 1
+                print(next_step);
+                for light in range(1, 7):
+                    if next_step[light] == "255":
+                        GPIO.output(pin_map[logical_map[light]], True)
+                    else:
+                        GPIO.output(pin_map[logical_map[light]], False)
 
-print('Cleaning up the GPIOs')
-GPIO.cleanup()
+                # if the END command
+                if next_step[1].rstrip() == "END":
+                    for i in range(1, 9):
+                        GPIO.output(pin_map[logical_map[i]], False)
+                    break
+                step += 1
+
+        print('Cleaning up the GPIOs')
+        GPIO.cleanup()
