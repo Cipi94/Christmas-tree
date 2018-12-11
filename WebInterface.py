@@ -1,18 +1,19 @@
 import time
 
 from flask import Flask, redirect
-from aaa import Prova
+
+from prova import Prova
 import threading
 from controller import Controller
-from vixenexport import VixenExport
+# from vixenexport import VixenExport
 
 app = Flask(__name__)
 
-# stri = 's'
-# x = Prova('music')
-# t2 = threading.Thread(target=x.start_music)
+x = Prova('music')
+t2 = threading.Thread(target=x.start_music)
 #
-# t1 = None
+t1 = None
+controller = Controller()
 
 
 @app.route('/')
@@ -74,14 +75,19 @@ def start_music(music=None):
     return redirect("/")
 
 
+@app.route('/stop_music')
+def stop_music():
+    controller.stop()
+
+
 def thread_init(music):
     global t1
     t1 = threading.Thread(target=x.start_music)
-    global vixenThread
-    vixenThread = threading.Thread(target=VixenExport, args=music)
+#    global vixenThread
+#    vixenThread = threading.Thread(target=VixenExport, args=music)
 
 
-controller = Controller()
+# controller = Controller()
 
 if __name__ == '__main__':
     app.run(debug=True)
