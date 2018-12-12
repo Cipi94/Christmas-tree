@@ -2,23 +2,36 @@ import time
 
 from flask import Flask, redirect
 
-from prova import Prova
+from singleton import Singleton
 import threading
 from controller import Controller
 # from vixenexport import VixenExport
 
 app = Flask(__name__)
-
-x = Prova('music')
+sing = Singleton().hello()
+# x = Prova('music')
 t2 = threading.Thread(target=x.start_music)
 #
 t1 = None
-controller = Controller()
 
 
 @app.route('/')
 def hello_world():
     return '<a href="/aaa">start</a>'
+
+
+@app.route('/on')
+def turn_on():
+    controller.getInstance()
+    controller.turn_on()
+    return "Tree turned on"
+
+
+@app.route('/off')
+def turn_off():
+    controller.getInstance()
+    controller.turn_off()
+    return "Tree turned off"
 
 
 @app.route('/<username>')
@@ -90,4 +103,5 @@ def thread_init(music):
 # controller = Controller()
 
 if __name__ == '__main__':
+    controller = Controller()
     app.run(debug=True)

@@ -164,4 +164,4 @@ class Xmas:
         GPIO.cleanup()
 
     def stop_music(self):
-        self.stop = True
+        self._stop = True
