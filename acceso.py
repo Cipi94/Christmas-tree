@@ -59,3 +59,4 @@ class Acceso:
 						GPIO.output(pin_map[logical_map[i-1]], 0)
 					time.sleep(0.1)
 				GPIO.output(pin_map[logical_map[6]], random.choice([0, 1]))
+		GPIO.cleanup()

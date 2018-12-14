@@ -41,7 +41,7 @@ def test(username):
 
 @app.route('/aaa')
 def aaa():
-    global x
+    # global x
     if t2.isAlive():
         print(t2.isAlive())
         return '<h1>music has already started</h1><br><a href="/bbb">stop</a>'
