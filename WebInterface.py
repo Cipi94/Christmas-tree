@@ -10,7 +10,7 @@ from controller import Controller
 app = Flask(__name__)
 #sing = Singleton().hello()
 # x = Prova('music')
-t2 = threading.Thread(target=x.start_music)
+# t2 = threading.Thread(target=x.start_music)
 #
 t1 = None
 
