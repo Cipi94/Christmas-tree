@@ -42,6 +42,7 @@ class Controller:
             raise ValueError("Thread already started")
         else:
             self._t1 = threading.Thread(target=self._acceso.on)
+            self._t1.start()
 
     def turn_off(self):
         self._acceso.off()
