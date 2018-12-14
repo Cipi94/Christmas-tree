@@ -19,7 +19,7 @@ class Controller:
             Controller._instance = self
             self._t1 = threading.Thread()
             self._xmas = Xmas()
-            self._acceso = Acceso()
+            self._acceso = Acceso(True)
 
     def __init_thread(self, music, is_vixen):
         if is_vixen:
