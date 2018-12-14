@@ -1,14 +1,14 @@
 import time
 
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 
-#from singleton import Singleton
+# from singleton import Singleton
 import threading
 from controller import Controller
 # from vixenexport import VixenExport
 
 app = Flask(__name__)
-#sing = Singleton().hello()
+# sing = Singleton().hello()
 # x = Prova('music')
 # t2 = threading.Thread(target=x.start_music)
 #
@@ -39,25 +39,25 @@ def test(username):
     return "Ciao %s" % username
 
 
-@app.route('/aaa')
-def aaa():
-    # global x
-    if t2.isAlive():
-        print(t2.isAlive())
-        return '<h1>music has already started</h1><br><a href="/bbb">stop</a>'
-    else:
-        thread_init(None)
-        t1.start()
-        return '<h1>starting music</h1><br><a href="/bbb">stop</a>'
+# @app.route('/aaa')
+# def aaa():
+#     # global x
+#     if t2.isAlive():
+#         print(t2.isAlive())
+#         return '<h1>music has already started</h1><br><a href="/bbb">stop</a>'
+#     else:
+#         thread_init(None)
+#         t1.start()
+#         return '<h1>starting music</h1><br><a href="/bbb">stop</a>'
 
 
-@app.route('/bbb')
-def m_stop():
-    global x
-    x.stop_music()
-    time.sleep(2)
-    print(t1.isAlive())
-    return '<a href="/aaa">start</a>'
+# @app.route('/bbb')
+# def m_stop():
+#     global x
+#     x.stop_music()
+#     time.sleep(2)
+#     print(t1.isAlive())
+#     return '<a href="/aaa">start</a>'
 
 # @app.route('/bbb')
 # def bbb():
@@ -93,9 +93,21 @@ def stop_music():
     controller.stop()
 
 
-def thread_init(music):
-    global t1
-    t1 = threading.Thread(target=x.start_music)
+@app.route('/action', methods=['GET', 'POST'])
+def do_action():
+    controller.getInstance()
+    if request.method == 'GET':
+        if request.args.get('cmd') == 'on':
+            controller.turn_on()
+            return "Tree turned on <a href='/'>home</a>"
+        else:
+            return "wrong get parameter"
+    return "Not a GET method"
+
+
+# def thread_init(music):
+#     global t1
+#     t1 = threading.Thread(target=x.start_music)
 #    global vixenThread
 #    vixenThread = threading.Thread(target=VixenExport, args=music)
 
