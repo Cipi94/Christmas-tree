@@ -54,9 +54,15 @@ class Acceso:
             for i in range(1, 7):
                 GPIO.output(pin_map[logical_map[i]], 1)
             for sec in range(0, self.wait):
-                if not self.stop:
+                if self.stop:
+
+                    if self.debug is True:
+                        print("Stopping tree")
+
+                    self._close()
                     return
                 time.sleep(1)
+                # END IF STOP
             # time.sleep(60)
             for j in range(5):
                 for i in range(1, 6):
@@ -70,4 +76,8 @@ class Acceso:
 
         if self.debug is True:
             print("Cleaning up GPIOs")
+
+        self._close()
+
+    def _close(self):
         GPIO.cleanup()

@@ -13,15 +13,15 @@ import os.path
 
 
 # Defining signal interrupt handler
-def signal_term_handler(signal, frame):
-    print("Someone is trying to kill me")
-    print('Cleaning up the GPIOs')
-    GPIO.cleanup()
-    sys.exit()
-
-
-signal.signal(signal.SIGTERM, signal_term_handler)
-signal.signal(signal.SIGINT, signal_term_handler)
+# def signal_term_handler(signal, frame):
+#     print("Someone is trying to kill me")
+#     print('Cleaning up the GPIOs')
+#     GPIO.cleanup()
+#     sys.exit()
+#
+#
+# signal.signal(signal.SIGTERM, signal_term_handler)
+# signal.signal(signal.SIGINT, signal_term_handler)
 
 
 class Xmas:
@@ -78,7 +78,7 @@ class Xmas:
         self._stop = False
 
         while not self._stop:
-            next_step = seq_data[step].split(",");
+            next_step = seq_data[step].split(",")
             next_step[1] = next_step[1].rstrip()
             cur_time = int(round(time.time() * 1000)) - start_time
 
