@@ -97,12 +97,14 @@ def stop_music():
 def do_action():
     controller.getInstance()
     if request.method == 'GET':
-        if request.args.get('cmd') == 'on':
+        cmd = request.args.get('cmd')
+        if cmd == 'on':
             controller.turn_on()
             return "Tree turned on <a href='/'>home</a>"
-        else:
-            return "wrong get parameter"
-    return "Not a GET method"
+        elif cmd == 'off':
+            controller.turn_off()
+            return "Tree turned off <a href='/'>home</a>"
+    return "ERROR"
 
 
 # def thread_init(music):

@@ -25,6 +25,7 @@ class Acceso:
     def __init__(self, debug=False):
         self.stop = False
         self.debug = debug
+        self.wait = 60
 
     def off(self):
         self.stop = True
@@ -52,7 +53,11 @@ class Acceso:
         while not self.stop:
             for i in range(1, 7):
                 GPIO.output(pin_map[logical_map[i]], 1)
-            time.sleep(60)
+            for sec in range(0, self.wait):
+                if not self.stop:
+                    return
+                time.sleep(1)
+            # time.sleep(60)
             for j in range(5):
                 for i in range(1, 6):
                     GPIO.output(pin_map[logical_map[i]], 1)
