@@ -17,7 +17,9 @@ t1 = None
 
 @app.route('/')
 def hello_world():
-    return render_template('index.html')
+    cont = Controller.getInstance()
+    song_list = cont.get_song_list()
+    return render_template('index.html', song_list=song_list)
 
 
 @app.route('/on')
@@ -95,17 +97,31 @@ def stop_music():
 
 @app.route('/action', methods=['GET', 'POST'])
 def do_action():
-    controller.getInstance()
+    cont = controller.getInstance()
     if request.method == 'GET':
         cmd = request.args.get('cmd')
         if cmd == 'on':
-            controller.turn_on()
+            cont.turn_on()
             return "Tree turned on <a href='/'>home</a>"
         elif cmd == 'off':
-            controller.turn_off()
+            cont.turn_off()
             return "Tree turned off <a href='/'>home</a>"
     return "ERROR"
 
+
+@app.route('/music', methods=['GET', 'POST'])
+def control_music():
+    cont = controller.getInstance()
+    if request.method == 'GET':
+        cmd = request.args.get('cmd')
+        if cmd == 'play':
+            song = request.args.get('song')
+            cont.play(song, False)
+            return "Music started <a href='/'>home</a>"
+        elif cmd == 'off':
+            cont.stop()
+            return "Music stopped <a href='/'>home</a>"
+    return "ERROR"
 
 # def thread_init(music):
 #     global t1

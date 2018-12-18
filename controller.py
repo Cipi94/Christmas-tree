@@ -3,6 +3,7 @@ from acceso import Acceso
 import threading
 import sqlite3
 
+
 class Controller:
     _instance = None
 
@@ -49,6 +50,9 @@ class Controller:
 
     def turn_off(self):
         self._acceso.off()
+
+    def get_song_list(self):
+        return self._db_manager.get_song_list()
 
 
 class DbManager:
