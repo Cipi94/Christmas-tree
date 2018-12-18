@@ -1,7 +1,7 @@
 from xmas import Xmas
 from acceso import Acceso
 import threading
-
+import sqlite3
 
 class Controller:
     _instance = None
@@ -18,20 +18,23 @@ class Controller:
         else:
             Controller._instance = self
             self._t1 = threading.Thread()
+            self._db_manager = DbManager()
             self._xmas = Xmas()
             self._acceso = Acceso(True)
 
-    def __init_thread(self, music, is_vixen):
+    def __init_thread(self, encoding, music, is_vixen):
         if is_vixen:
-            self._t1 = threading.Thread(target=self._xmas.play_from_vixen, args=music)
+            self._t1 = threading.Thread(target=self._xmas.play_from_vixen, args=(encoding, music))
         else:
-            self._t1 = threading.Thread(target=self._xmas.play, args=music)
+            self._t1 = threading.Thread(target=self._xmas.play, args=(encoding, music))
 
     def play(self, music, is_vixen):
         if self._t1.isAlive():
             raise ValueError("A song is already playing")
         else:
-            self.__init_thread(music, is_vixen)
+            file_audio = self._db_manager.get_music_file(music)
+            file_encoding = self._db_manager.get_encoding_file(music)
+            self.__init_thread(file_encoding, file_audio, is_vixen)
             self._t1.start()
 
     def stop(self):
@@ -46,3 +49,31 @@ class Controller:
 
     def turn_off(self):
         self._acceso.off()
+
+
+class DbManager:
+
+    def __init__(self):
+        self.encoding_query = "SELECT ENCODING_FILE FROM songs WHERE NAME=?"
+        self.audio_query = "SELECT FILE_AUDIO FROM songs WHERE NAME=?"
+        self.song_list_query = "SELECT NAME FROM songs"
+
+        self._conn = sqlite3.connect('config/songs.db')
+        self._c = self._conn.cursor()
+
+    def get_song_list(self):
+        self._c.execute(self.song_list_query)
+        song_names = self._c.fetchall()
+        return song_names
+
+    def get_music_file(self, song_name):
+        self._c.execute(self.audio_query, song_name)
+        file_audio = self._c.fetchall()
+        # TODO add check on the number of file_audio elements
+        return file_audio.pop(0)[0]
+
+    def get_encoding_file(self, song_name):
+        self._c.execute(self.encoding_query, song_name)
+        encoding_file = self._c.fetchall()
+        # TODO add check on the number of file_audio elements
+        return encoding_file.pop(0)[0]

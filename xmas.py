@@ -29,7 +29,7 @@ class Xmas:
     def __init__(self):
         self._stop = False
 
-    def play(self, music):
+    def play(self, encoding, music):
 
         pin_map = [0, 11, 12, 13, 15, 16, 18, 22, 7]
 
@@ -57,7 +57,7 @@ class Xmas:
         logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
         # Open the input sequence file and read/parse it
-        with open(music + "." + "csv", 'r') as f:
+        with open(encoding, 'r') as f:
             seq_data = f.readlines()
             for i in range(len(seq_data)):
                 seq_data[i] = seq_data[i].rstrip()
@@ -72,7 +72,7 @@ class Xmas:
         # Load and play the music
         pygame.mixer.pre_init(44100, -16, 2, 1024)
         pygame.mixer.init()
-        pygame.mixer.music.load(music + "." + "wav")
+        pygame.mixer.music.load(music)
         pygame.mixer.music.play()
 
         self._stop = False
@@ -112,7 +112,7 @@ class Xmas:
                 print ('Starting Acceso.py')
                 subprocess.check_output("bash acceso.sh", shell=True)'''
 
-    def play_from_vixen(self, music):
+    def play_from_vixen(self, encoding, music):
         pin_map = [0, 11, 12, 13, 15, 16, 18, 22, 7]
 
         GPIO.setmode(GPIO.BOARD)
@@ -125,7 +125,7 @@ class Xmas:
         logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
         # Open the input sequence file and read/parse it
-        with open(sys.argv[1], 'r') as f:
+        with open(encoding, 'r') as f:
             seq_data = f.readlines()
             for i in range(len(seq_data)):
                 seq_data[i] = seq_data[i].rstrip()
@@ -135,7 +135,7 @@ class Xmas:
         # Load and play the music
         pygame.mixer.pre_init(44100, -16, 2, 1024)
         pygame.mixer.init()
-        pygame.mixer.music.load(sys.argv[2])
+        pygame.mixer.music.load(music)
         pygame.mixer.music.play()
 
         self._stop = False
@@ -146,7 +146,7 @@ class Xmas:
             # time to run the command
             if int(next_step[0]) <= cur_time:
 
-                print(next_step);
+                print(next_step)
                 for light in range(1, 7):
                     if next_step[light] == "255":
                         GPIO.output(pin_map[logical_map[light]], True)
