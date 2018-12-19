@@ -62,22 +62,25 @@ class DbManager:
         self.audio_query = "SELECT FILE_AUDIO FROM songs WHERE NAME=?"
         self.song_list_query = "SELECT NAME FROM songs"
 
-        self._conn = sqlite3.connect('config/songs.db')
-        self._c = self._conn.cursor()
-
     def get_song_list(self):
-        self._c.execute(self.song_list_query)
-        song_names = self._c.fetchall()
+        conn = sqlite3.connect('config/songs.db')
+        c = conn.cursor()
+        c.execute(self.song_list_query)
+        song_names = c.fetchall()
         return song_names
 
     def get_music_file(self, song_name):
-        self._c.execute(self.audio_query, song_name)
-        file_audio = self._c.fetchall()
+        conn = sqlite3.connect('config/songs.db')
+        c = conn.cursor()
+        c.execute(self.audio_query, song_name)
+        file_audio = c.fetchall()
         # TODO add check on the number of file_audio elements
         return file_audio.pop(0)[0]
 
     def get_encoding_file(self, song_name):
-        self._c.execute(self.encoding_query, song_name)
-        encoding_file = self._c.fetchall()
+        conn = sqlite3.connect('config/songs.db')
+        c = conn.cursor()
+        c.execute(self.encoding_query, song_name)
+        encoding_file = c.fetchall()
         # TODO add check on the number of file_audio elements
         return encoding_file.pop(0)[0]
