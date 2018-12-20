@@ -66,7 +66,10 @@ class DbManager:
         conn = sqlite3.connect('config/songs.db')
         c = conn.cursor()
         c.execute(self.song_list_query)
-        song_names = c.fetchall()
+        query_result = c.fetchall()
+        song_names = list()
+        for name in query_result:
+            song_names.append(name)
         return song_names
 
     def get_music_file(self, song_name):
