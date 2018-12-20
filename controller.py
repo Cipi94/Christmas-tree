@@ -75,15 +75,15 @@ class DbManager:
     def get_music_file(self, song_name):
         conn = sqlite3.connect('config/songs.db')
         c = conn.cursor()
-        c.execute(self.audio_query, song_name)
+        c.execute(self.audio_query, (song_name,))
         file_audio = c.fetchall()
         # TODO add check on the number of file_audio elements
-        return file_audio.pop(0)[0]
+        return file_audio[0]
 
     def get_encoding_file(self, song_name):
         conn = sqlite3.connect('config/songs.db')
         c = conn.cursor()
-        c.execute(self.encoding_query, song_name)
+        c.execute(self.encoding_query, (song_name,))
         encoding_file = c.fetchall()
         # TODO add check on the number of file_audio elements
-        return encoding_file.pop(0)[0]
+        return encoding_file[0]
