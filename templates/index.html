@@ -15,7 +15,7 @@
 <a href="/action?cmd=off">SPEGNI</a>
 <br><br>
 <form action="/music" method="get">
-    <select name="songs" id="song_drop_down">
+    <select name="song" id="song_drop_down">
         {% for song_name in song_list %}
         <option value="{{ song_name }}">{{ song_name }}</option>
         {% endfor %}
