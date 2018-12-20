@@ -69,7 +69,7 @@ class DbManager:
         query_result = c.fetchall()
         song_names = list()
         for name in query_result:
-            song_names.append(name)
+            song_names.append(name[0])
         return song_names
 
     def get_music_file(self, song_name):
