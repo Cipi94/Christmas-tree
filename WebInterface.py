@@ -118,7 +118,7 @@ def control_music():
             song = request.args.get('song')
             cont.play(song, False)
             return "Music started <a href='/'>home</a>"
-        elif cmd == 'off':
+        elif cmd == 'stop':
             cont.stop()
             return "Music stopped <a href='/'>home</a>"
     return "ERROR"
