@@ -26,8 +26,9 @@ import os.path
 
 class Xmas:
 
-    def __init__(self):
+    def __init__(self, debug=False):
         self._stop = False
+        self.debug = debug
 
     def play(self, encoding, music):
 
@@ -84,8 +85,8 @@ class Xmas:
 
             # time to run the command
             if int(next_step[0]) <= cur_time:
-
-                print(next_step)
+                if self.debug:
+                    print(next_step)
                 # if the command is Relay 1-8
                 if "1" <= next_step[1] <= "8":
 
@@ -105,6 +106,12 @@ class Xmas:
                 step += 1
 
         print('Cleaning up the GPIOs')
+
+        if self._stop:
+            pygame.mixer.stop()
+
+        for i in range(1, 8):
+            GPIO.output(pin_map[logical_map[i]], 0)
         GPIO.cleanup()
         '''while True:
             choice = raw_input('Do you want to light up the tree? y/n\n> ')
@@ -145,8 +152,8 @@ class Xmas:
 
             # time to run the command
             if int(next_step[0]) <= cur_time:
-
-                print(next_step)
+                if self.debug:
+                    print(next_step)
                 for light in range(1, 7):
                     if next_step[light] == "255":
                         GPIO.output(pin_map[logical_map[light]], True)
@@ -159,6 +166,12 @@ class Xmas:
                         GPIO.output(pin_map[logical_map[i]], False)
                     break
                 step += 1
+
+        if self._stop:
+            pygame.mixer.stop()
+
+        for i in range(1, 8):
+            GPIO.output(pin_map[logical_map[i]], 0)
 
         print('Cleaning up the GPIOs')
         GPIO.cleanup()
