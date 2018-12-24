@@ -236,3 +236,9 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/audio,maven,python,pycharm
+
+
+### Customs ###
+log.txt
+*.log
+
