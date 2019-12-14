@@ -1,32 +1,54 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
     <title>Christmas tree</title>
 </head>
+
 <body>
-{#<a href="/on">accendi</a>#}
-{#<a href="/off">spegni</a>#}
-<br>
-<a href="/action?cmd=on">accendi</a>
-<a href="/action?cmd=off">SPEGNI</a>
-<br><br>
-<form action="/music" method="get">
-    <select name="song" id="song_drop_down">
-        {% for song_name in song_list %}
-        <option value="{{ song_name }}">{{ song_name }}</option>
-        {% endfor %}
-    </select>
-    <input type="hidden" name="cmd" value="play">
-    <button type="submit">Play!</button>
-</form>
+    <section class="section">
+        <div class="container">
+            <div class="buttons">
+                {#<a href="/on" class="button is-success">accendi</a>#}
+                {#<a href="/off" class="button is-warning">spegni</a>#}
+            </div>
 
-<br><br>
+            <br>
+            <a href="/action?cmd=on">accendi</a>
+            <a href="/action?cmd=off">SPEGNI</a>
+            <br><br>
+            <form action="/music" method="get">
+                <div class="field box">
+                        <div class="control has-icons-left">
+                          <div class="select is-primary">
+                                <select name="song" id="song_drop_down">
+                                        {% for song_name in song_list %}
+                                        <option value="{{ song_name }}">{{ song_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                          </div>
+                          <div class="icon is-small is-left">
+                                <i class="fas fa-music"></i>
+                              </div>
+                        </div>
+                      </div>
+                
+                <input type="hidden" name="cmd" value="play">
+                <button type="submit">Play!</button>
+            </form>
 
-<a href="/music?cmd=stop">Stop music</a>
+            <br><br>
+
+            <a href="/music?cmd=stop" class="button is-danger">Stop music</a>
+        </div>
+    </section>
 
 </body>
+
 </html>
