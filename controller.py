@@ -20,7 +20,7 @@ class Controller:
             Controller._instance = self
             self._t1 = threading.Thread()
             self._db_manager = DbManager()
-            self._xmas = Xmas()
+            self._xmas = Xmas(True)
             self._acceso = Acceso(True)
 
     def __init_thread(self, encoding, music, is_vixen):

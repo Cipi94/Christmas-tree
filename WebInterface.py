@@ -12,7 +12,7 @@ app = Flask(__name__)
 # x = Prova('music')
 # t2 = threading.Thread(target=x.start_music)
 #
-t1 = None
+# t1 = None
 
 
 @app.route('/')
@@ -24,15 +24,15 @@ def hello_world():
 
 @app.route('/on')
 def turn_on():
-    controller.getInstance()
-    controller.turn_on()
+    Controller.getInstance()
+    Controller.turn_on()
     return "Tree turned on <a href='/'>home</a>"
 
 
 @app.route('/off')
 def turn_off():
-    controller.getInstance()
-    controller.turn_off()
+    Controller.getInstance()
+    Controller.turn_off()
     return "Tree turned off <a href='/'>home</a>"
 
 
@@ -84,7 +84,7 @@ def start_music(music=None):
     #
     # return "Error"
     try:
-        controller.play(music, True)
+        Controller.play(music, True)
     except ValueError:
         return "music already playing or thread error"
     return redirect("/")
@@ -92,12 +92,12 @@ def start_music(music=None):
 
 @app.route('/stop_music')
 def stop_music():
-    controller.stop()
+    Controller.stop()
 
 
 @app.route('/action', methods=['GET', 'POST'])
 def do_action():
-    cont = controller.getInstance()
+    cont = Controller.getInstance()
     if request.method == 'GET':
         cmd = request.args.get('cmd')
         if cmd == 'on':
@@ -111,7 +111,7 @@ def do_action():
 
 @app.route('/music', methods=['GET', 'POST'])
 def control_music():
-    cont = controller.getInstance()
+    cont = Controller.getInstance()
     if request.method == 'GET':
         cmd = request.args.get('cmd')
         if cmd == 'play':
