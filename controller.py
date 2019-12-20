@@ -24,6 +24,7 @@ class Controller:
             self._acceso = Acceso(True)
 
     def __init_thread(self, encoding, music, is_vixen):
+        print(is_vixen)
         if is_vixen:
             self._t1 = threading.Thread(target=self._xmas.play_from_vixen, args=(encoding, music))
         else:
@@ -70,6 +71,7 @@ class DbManager:
         song_names = list()
         for name in query_result:
             song_names.append(name[0])
+        c.close()
         return song_names
 
     def get_music_file(self, song_name):
@@ -79,6 +81,7 @@ class DbManager:
         file_audio = c.fetchall()
         # TODO add check on the number of file_audio elements
         print(file_audio[0])
+        c.close()
         return file_audio.pop(0)[0]
 
     def get_encoding_file(self, song_name):
@@ -88,4 +91,5 @@ class DbManager:
         encoding_file = c.fetchall()
         # TODO add check on the number of file_audio elements
         print(encoding_file[0])
+        c.close()
         return encoding_file.pop(0)[0]
