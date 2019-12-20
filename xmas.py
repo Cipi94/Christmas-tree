@@ -133,47 +133,49 @@ class Xmas:
 
         logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-        # Open the input sequence file and read/parse it
-        with open(encoding, 'r') as f:
-            seq_data = f.readlines()
-            for i in range(len(seq_data)):
-                seq_data[i] = seq_data[i].rstrip()
-
-        start_time = int(round(time.time() * 1000))
-        step = 0
-        # Load and play the music
-        pygame.mixer.pre_init(44100, -16, 2, 1024)
-        pygame.mixer.init()
-        pygame.mixer.music.load(music)
-        pygame.mixer.music.play()
-
         try:
-            self._stop = False
-            while not self._stop:
-                next_step = seq_data[step].split(",")
-                cur_time = int(round(time.time() * 1000)) - start_time
+            # Open the input sequence file and read/parse it
+            with open(encoding, 'r') as f:
+                seq_data = f.readlines()
+                for i in range(len(seq_data)):
+                    seq_data[i] = seq_data[i].rstrip()
 
-                # time to run the command
-                if int(next_step[0]) <= cur_time:
-                    if self.debug:
-                        print(next_step)
-                    for light in range(1, 7):
-                        if next_step[light] == "255":
-                            GPIO.output(pin_map[logical_map[light]], True)
-                        else:
-                            GPIO.output(pin_map[logical_map[light]], False)
+            start_time = int(round(time.time() * 1000))
+            step = 0
+            # Load and play the music
+            pygame.mixer.pre_init(44100, -16, 2, 1024)
+            pygame.mixer.init()
+            pygame.mixer.music.load(music)
+            pygame.mixer.music.play()
+            try:
+                self._stop = False
+                while not self._stop:
+                    next_step = seq_data[step].split(",")
+                    cur_time = int(round(time.time() * 1000)) - start_time
 
-                    # if the END command
-                    if next_step[1].rstrip() == "END":
-                        for i in range(1, 9):
-                            GPIO.output(pin_map[logical_map[i]], False)
-                        break
-                    step += 1
+                    # time to run the command
+                    if int(next_step[0]) <= cur_time:
+                        if self.debug:
+                            print(next_step)
+                        for light in range(1, 7):
+                            if next_step[light] == "255":
+                                GPIO.output(pin_map[logical_map[light]], True)
+                            else:
+                                GPIO.output(pin_map[logical_map[light]], False)
 
-            if self._stop:
-                print("stopping music...")
-                pygame.mixer.music.stop()
-                pygame.quit()
+                        # if the END command
+                        if next_step[1].rstrip() == "END":
+                            for i in range(1, 9):
+                                GPIO.output(pin_map[logical_map[i]], False)
+                            break
+                        step += 1
+            except Exception:
+                traceback.print_exc()
+            finally:
+                if self._stop:
+                    print("stopping music...")
+                    pygame.mixer.music.stop()
+                    pygame.quit()
         
         except Exception:
             traceback.print_exc()
