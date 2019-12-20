@@ -20,8 +20,10 @@
             </div>
 
             <br>
-            <a href="/action?cmd=on">accendi</a>
-            <a href="/action?cmd=off">SPEGNI</a>
+            <div class="buttons"></div>
+                <a href="/action?cmd=on" class="button is-success">accendi</a>
+                <a href="/action?cmd=off" class="button is-warning">SPEGNI</a>
+            </div>
             <br><br>
             <form action="/music" method="get">
                 <div class="field box">
@@ -40,7 +42,7 @@
                       </div>
                 
                 <input type="hidden" name="cmd" value="play">
-                <button type="submit">Play!</button>
+                <button type="submit" class="button is-primary">Play!</button>
             </form>
 
             <br><br>
