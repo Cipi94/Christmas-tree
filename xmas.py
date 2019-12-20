@@ -10,6 +10,7 @@ import pygame
 import signal
 import subprocess
 import os.path
+import traceback
 
 
 # Defining signal interrupt handler
@@ -126,7 +127,7 @@ class Xmas:
         for i in range(1, 9):
             GPIO.setup(pin_map[i], GPIO.OUT)
         time.sleep(2.0)
-
+        
         GPIO.output(7, True)
 
         logical_map = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -145,31 +146,35 @@ class Xmas:
         pygame.mixer.music.load(music)
         pygame.mixer.music.play()
 
-        self._stop = False
-        while not self._stop:
-            next_step = seq_data[step].split(",")
-            cur_time = int(round(time.time() * 1000)) - start_time
+        try:
+            self._stop = False
+            while not self._stop:
+                next_step = seq_data[step].split(",")
+                cur_time = int(round(time.time() * 1000)) - start_time
 
-            # time to run the command
-            if int(next_step[0]) <= cur_time:
-                if self.debug:
-                    print(next_step)
-                for light in range(1, 7):
-                    if next_step[light] == "255":
-                        GPIO.output(pin_map[logical_map[light]], True)
-                    else:
-                        GPIO.output(pin_map[logical_map[light]], False)
+                # time to run the command
+                if int(next_step[0]) <= cur_time:
+                    if self.debug:
+                        print(next_step)
+                    for light in range(1, 7):
+                        if next_step[light] == "255":
+                            GPIO.output(pin_map[logical_map[light]], True)
+                        else:
+                            GPIO.output(pin_map[logical_map[light]], False)
 
-                # if the END command
-                if next_step[1].rstrip() == "END":
-                    for i in range(1, 9):
-                        GPIO.output(pin_map[logical_map[i]], False)
-                    break
-                step += 1
+                    # if the END command
+                    if next_step[1].rstrip() == "END":
+                        for i in range(1, 9):
+                            GPIO.output(pin_map[logical_map[i]], False)
+                        break
+                    step += 1
 
-        if self._stop:
-            pygame.mixer.stop()
-
+            if self._stop:
+                pygame.mixer.stop()
+        
+        except Exception:
+            traceback.print_exc()
+        
         for i in range(1, 8):
             GPIO.output(pin_map[logical_map[i]], 0)
 
