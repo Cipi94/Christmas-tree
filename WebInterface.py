@@ -95,7 +95,7 @@ def stop_music():
     Controller.stop()
 
 
-@app.route('/action', methods=['GET', 'POST'])
+@app.route('/action', methods=['GET'])
 def do_action():
     cont = Controller.getInstance()
     if request.method == 'GET':
@@ -109,14 +109,14 @@ def do_action():
     return "ERROR"
 
 
-@app.route('/music', methods=['GET', 'POST'])
+@app.route('/music', methods=['GET'])
 def control_music():
     cont = Controller.getInstance()
     if request.method == 'GET':
         cmd = request.args.get('cmd')
         if cmd == 'play':
             song = request.args.get('song')
-            cont.play(song, False)
+            cont.play(song, True)
             return "Music started <a href='/'>home</a>"
         elif cmd == 'stop':
             cont.stop()
