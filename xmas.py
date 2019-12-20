@@ -109,7 +109,8 @@ class Xmas:
         print('Cleaning up the GPIOs')
 
         if self._stop:
-            pygame.mixer.stop()
+            pygame.mixer.music.stop()
+            pygame.quit()
 
         for i in range(1, 8):
             GPIO.output(pin_map[logical_map[i]], 0)
@@ -170,7 +171,9 @@ class Xmas:
                     step += 1
 
             if self._stop:
-                pygame.mixer.stop()
+                print("stopping music...")
+                pygame.mixer.music.stop()
+                pygame.quit()
         
         except Exception:
             traceback.print_exc()
